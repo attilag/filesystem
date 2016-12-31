@@ -21,6 +21,7 @@
 #include <utility>
 #include <climits>
 #include <cstdio>
+#include <tuple>
 
 #if defined(_WIN32)
 # include <windows.h>
