@@ -179,7 +179,7 @@ public:
 			throw std::runtime_error("path::file_size(): cannot stat file \"" + str() + "\"!");
 		}
 #endif
-		return (size_t) sb.st_size;
+		return static_cast<size_t>(sb.st_size);
 	}
 
 	bool is_directory() const {
@@ -423,7 +423,7 @@ public:
 		}
 
 		LARGE_INTEGER size;
-		size.QuadPart = (LONGLONG) target_length;
+		size.QuadPart = static_cast<LONGLONG>(target_length);
 
 		if (SetFilePointerEx(handle, size, NULL, FILE_BEGIN) == 0) {
 			CloseHandle(handle);
@@ -461,9 +461,9 @@ public:
 #if defined(_WIN32)
 	std::wstring wstr(path_type t = native_path) const {
 		std::string temp = str(t);
-		int size = MultiByteToWideChar(CP_UTF8, 0, &temp[0], (int)temp.size(), NULL, 0);
+		int size = MultiByteToWideChar(CP_UTF8, 0, &temp[0], static_cast<int>(temp.size()), NULL, 0);
 		std::wstring result(size, 0);
-		MultiByteToWideChar(CP_UTF8, 0, &temp[0], (int)temp.size(), &result[0], size);
+		MultiByteToWideChar(CP_UTF8, 0, &temp[0], static_cast<int>(temp.size()), &result[0], size);
 		return result;
 	}
 
@@ -472,9 +472,9 @@ public:
 		std::string string;
 
 		if (!wstring.empty()) {
-			int size = WideCharToMultiByte(CP_UTF8, 0, &wstring[0], (int)wstring.size(), NULL, 0, NULL, NULL);
+			int size = WideCharToMultiByte(CP_UTF8, 0, &wstring[0], static_cast<int>(wstring.size()), NULL, 0, NULL, NULL);
 			string.resize(size, 0);
-			WideCharToMultiByte(CP_UTF8, 0, &wstring[0], (int)wstring.size(), &string[0], size, NULL, NULL);
+			WideCharToMultiByte(CP_UTF8, 0, &wstring[0], static_cast<int>(wstring.size()), &string[0], size, NULL, NULL);
 		}
 
 		this->set(string, t);
@@ -576,7 +576,7 @@ struct hash<filesystem::path> {
 
 	result_type operator()(const filesystem::path &path) const {
 		std::size_t seed { 0 };
-		hash_combine(seed, (size_t) path.type);
+		hash_combine(seed, static_cast<size_t>(path.type));
 		hash_combine(seed, path.absolute);
 		for (const string &s : path.leafs) {
 			hash_combine(seed, s);
