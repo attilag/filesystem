@@ -102,6 +102,21 @@ public:
 			, absolute(false) {
 	}
 
+  template<class Source>
+    path& append(const Source& src) {
+      filesystem::path p(src);
+      return (*this /= p);
+    }
+
+  template<class InputIt>
+    path& append(InputIt first, InputIt last) {
+      std::copy(first, last, std::back_inserter(leafs));
+      return *this;
+    }
+
+  path& remove_filename();
+  path& replace_filename(const filesystem::path&);
+
 	size_t length() const {
 		return this->leafs.size();
 	}
@@ -264,6 +279,14 @@ public:
 
 		return result;
 	}
+
+  path& operator/= (const filesystem::path& rhs);
+
+  template<class Source>
+    path& operator /= (const Source& src) {
+      filesystem::path p(src);
+      return (*this /= p);
+  }
 
 	std::string str(path_type t = native_path) const {
 		std::ostringstream oss;
@@ -496,6 +519,18 @@ public:
 
 	bool operator <(const path &right) const {
 		return std::tie(this->type, this->absolute, this->leafs) < std::tie(right.type, right.absolute, right.leafs);
+	}
+	
+  bool operator <=(const path &right) const {
+		return std::tie(this->type, this->absolute, this->leafs) <= std::tie(right.type, right.absolute, right.leafs);
+	}
+
+	bool operator >(const path &right) const {
+		return std::tie(this->type, this->absolute, this->leafs) > std::tie(right.type, right.absolute, right.leafs);
+	}
+
+	bool operator >=(const path &right) const {
+		return std::tie(this->type, this->absolute, this->leafs) >= std::tie(right.type, right.absolute, right.leafs);
 	}
 
 	/*
