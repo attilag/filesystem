@@ -65,17 +65,17 @@ public:
 			, absolute(false) {
 	}
 
-	path(const path &path)
-			: type(path.type)
-			, leafs(path.leafs)
-			, absolute(path.absolute) {
+	path(const path &src)
+			: type(src.type)
+			, leafs(src.leafs)
+			, absolute(src.absolute) {
 	}
 
 #if __cplusplus >= 201103L
-	path(path &&path)
-			: type(path.type)
-			, leafs(std::move(path.leafs))
-			, absolute(path.absolute) {
+	path(path &&src)
+			: type(src.type)
+			, leafs(std::move(src.leafs))
+			, absolute(src.absolute) {
 	}
 #endif
 
@@ -96,9 +96,9 @@ public:
 	}
 #endif
 
-	path(const std::vector<std::string> &leafs)
+	path(const std::vector<std::string> &ls)
 			: type(native_path)
-			, leafs(leafs)
+			, leafs(ls)
 			, absolute(false) {
 	}
 
@@ -265,7 +265,7 @@ public:
 		return result;
 	}
 
-	std::string str(path_type type = native_path) const {
+	std::string str(path_type t = native_path) const {
 		std::ostringstream oss;
 
 		if (this->type == posix_path && this->absolute) {
@@ -276,7 +276,7 @@ public:
 			oss << this->leafs[i];
 
 			if (i+1 < this->leafs.size()) {
-				if (type == posix_path) {
+				if (t == posix_path) {
 					oss << '/';
 				} else {
 					oss << '\\';
@@ -287,9 +287,9 @@ public:
 		return oss.str();
 	}
 
-	void set(const std::string &str, path_type type = native_path) {
-		this->type = type;
-		if (type == windows_path) {
+	void set(const std::string &str, path_type t = native_path) {
+		this->type = t;
+		if (this->type == windows_path) {
 			this->leafs = tokenize(str, "/\\");
 			this->absolute = str.size() >= 2 && std::isalpha(str[0]) && str[1] == ':';
 		} else {
@@ -384,18 +384,18 @@ public:
 		return result;
 	}
 
-	path &operator =(const path &path) {
-		this->type = path.type;
-		this->leafs = path.leafs;
-		this->absolute = path.absolute;
+	path &operator =(const path &rhs) {
+		this->type = rhs.type;
+		this->leafs = rhs.leafs;
+		this->absolute = rhs.absolute;
 		return *this;
 	}
 
-	path &operator =(path &&path) {
-		if (this != &path) {
-			this->type = path.type;
-			this->leafs = std::move(path.leafs);
-			this->absolute = path.absolute;
+	path &operator =(path &&rhs) {
+		if (this != &rhs) {
+			this->type = rhs.type;
+			this->leafs = std::move(rhs.leafs);
+			this->absolute = rhs.absolute;
 		}
 		return *this;
 	}
@@ -459,8 +459,8 @@ public:
 	}
 
 #if defined(_WIN32)
-	std::wstring wstr(path_type type = native_path) const {
-		std::string temp = str(type);
+	std::wstring wstr(path_type t = native_path) const {
+		std::string temp = str(t);
 		int size = MultiByteToWideChar(CP_UTF8, 0, &temp[0], (int)temp.size(), NULL, 0);
 		std::wstring result(size, 0);
 		MultiByteToWideChar(CP_UTF8, 0, &temp[0], (int)temp.size(), &result[0], size);
@@ -468,7 +468,7 @@ public:
 	}
 
 
-	void set(const std::wstring &wstring, path_type type = native_path) {
+	void set(const std::wstring &wstring, path_type t = native_path) {
 		std::string string;
 
 		if (!wstring.empty()) {
@@ -477,7 +477,7 @@ public:
 			WideCharToMultiByte(CP_UTF8, 0, &wstring[0], (int)wstring.size(), &string[0], size, NULL, NULL);
 		}
 
-		this->set(string, type);
+		this->set(string, t);
 	}
 
 	path &operator =(const std::wstring &str) {
