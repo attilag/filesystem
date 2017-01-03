@@ -48,21 +48,21 @@ enum class perms: unsigned int {
 
 class file_status {
   public:
-    file_status(const file_status&) noexcept = default;
-    file_status(file_status&&) noexcept = default;
+    file_status(const file_status&) NOEXCEPT = default;
+    file_status(file_status&&) NOEXCEPT = default;
     explicit file_status(filesystem::file_type type = filesystem::file_type::none,
-        filesystem::perms permissions = filesystem::perms::unknown) noexcept
+        filesystem::perms permissions = filesystem::perms::unknown) NOEXCEPT
       : file_type_(type), permissions_(permissions) { }
     ~file_status() = default;
 
-    file_status& operator=(const file_status&) noexcept = default;
-    file_status& operator=(file_status&&) noexcept = default;
+    file_status& operator=(const file_status&) NOEXCEPT = default;
+    file_status& operator=(file_status&&) NOEXCEPT = default;
 
-    filesystem::file_type type() const noexcept { return file_type_; }
-    void type(filesystem::file_type type) noexcept { file_type_ = type; }
+    filesystem::file_type type() const NOEXCEPT { return file_type_; }
+    void type(filesystem::file_type type) NOEXCEPT { file_type_ = type; }
 
-    filesystem::perms permissions() const noexcept { return permissions_; }
-    void permissions(filesystem::perms perm) noexcept { permissions_ = perm; }
+    filesystem::perms permissions() const NOEXCEPT { return permissions_; }
+    void permissions(filesystem::perms perm) NOEXCEPT { permissions_ = perm; }
 
   private:
     filesystem::file_type file_type_;

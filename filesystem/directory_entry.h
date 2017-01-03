@@ -5,6 +5,7 @@
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
+#include "config.h"
 #include "path.h"
 
 #include <system_error>
@@ -15,7 +16,7 @@ class file_status;
 
 class directory_entry {
   public:
-    directory_entry() noexcept = default;
+    directory_entry() NOEXCEPT = default;
     directory_entry(const directory_entry&) = default;
     directory_entry(directory_entry&&) = default;
     explicit directory_entry(const filesystem::path& p);
@@ -29,36 +30,36 @@ class directory_entry {
 
     void replace_filename(const filesystem::path&);
 
-    const class filesystem::path& path() const noexcept
+    const class filesystem::path& path() const NOEXCEPT
       { return path_; }
 
-    operator const class filesystem::path& () const noexcept
+    operator const class filesystem::path& () const NOEXCEPT
       { return path_; }
 
     filesystem::file_status status() const;
 
-    filesystem::file_status status(std::error_code& ec) const noexcept;
+    filesystem::file_status status(std::error_code& ec) const NOEXCEPT;
 
     filesystem::file_status symlink_status() const;
 
-    filesystem::file_status symlink_status(std::error_code& ec) const noexcept;
+    filesystem::file_status symlink_status(std::error_code& ec) const NOEXCEPT;
 
-    bool operator == (const directory_entry& rhs) const noexcept
+    bool operator == (const directory_entry& rhs) const NOEXCEPT
       { return path_ == rhs.path_; }
 
-    bool operator != (const directory_entry& rhs) const noexcept
+    bool operator != (const directory_entry& rhs) const NOEXCEPT
       { return path_ != rhs.path_; }
 
-    bool operator < (const directory_entry& rhs) const noexcept
+    bool operator < (const directory_entry& rhs) const NOEXCEPT
       { return path_ < rhs.path_; }
 
-    bool operator <= (const directory_entry& rhs) const noexcept
+    bool operator <= (const directory_entry& rhs) const NOEXCEPT
       { return path_ <= rhs.path_; }
 
-    bool operator > (const directory_entry& rhs) const noexcept
+    bool operator > (const directory_entry& rhs) const NOEXCEPT
       { return path_ > rhs.path_; }
 
-    bool operator >= (const directory_entry& rhs) const noexcept
+    bool operator >= (const directory_entry& rhs) const NOEXCEPT
       { return path_ >= rhs.path_; }
 
 private:

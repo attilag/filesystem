@@ -11,7 +11,7 @@ NAMESPACE_BEGIN(filesystem)
 
 NAMESPACE_BEGIN(detail_)
 
-  inline constexpr filesystem::file_type mode2file_type(mode_t m) {
+  inline CONSTEXPR filesystem::file_type mode2file_type(mode_t m) {
     if (S_ISREG(m)) {
       return file_type::regular;
     } else if (S_ISDIR(m)) {
@@ -32,7 +32,7 @@ NAMESPACE_BEGIN(detail_)
     return file_type::unknown;
   }
 
-  inline constexpr filesystem::perms mode2perms(mode_t m)
+  inline CONSTEXPR filesystem::perms mode2perms(mode_t m)
   {
 	  return ( ( (m & S_IRUSR) ? perms::owner_read : perms::none )
 	         | ( (m & S_IWUSR) ? perms::owner_write : perms::none )
@@ -126,7 +126,7 @@ filesystem::file_status directory_entry::status() const {
   return detail_::status(path_);
 }
 
-filesystem::file_status directory_entry::status(std::error_code& ec) const noexcept {
+filesystem::file_status directory_entry::status(std::error_code& ec) const NOEXCEPT {
   return detail_::status(path_, ec);
 }
 
@@ -134,7 +134,7 @@ filesystem::file_status directory_entry::symlink_status() const {
   return detail_::symlink_status(path_);
 }
 
-filesystem::file_status directory_entry::symlink_status(std::error_code& ec) const noexcept {
+filesystem::file_status directory_entry::symlink_status(std::error_code& ec) const NOEXCEPT {
   return detail_::symlink_status(path_, ec);
 }
 
